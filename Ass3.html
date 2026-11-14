@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Event Registration Form</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f5f8;
+        margin: 0;
+        color: #222;
+    }
+
+    header {
+        background: #123456;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .container {
+        width: 80%;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    h2 {
+        color: #123456;
+    }
+
+    label {
+        display: block;
+        margin-top: 12px;
+        font-weight: bold;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        width: auto;
+    }
+
+    .choice label {
+        display: inline-block;
+        margin-right: 15px;
+        font-weight: normal;
+    }
+
+    button {
+        background: #123456;
+        color: white;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 5px;
+        margin-top: 15px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #2468a0;
+    }
+
+    .error {
+        color: red;
+        font-size: 13px;
+    }
+
+    .success {
+        color: green;
+        font-weight: bold;
+    }
+
+    .section {
+        margin-top: 25px;
+        padding: 15px;
+        background: #eef3f8;
+        border-radius: 5px;
+    }
+
+    #rules {
+        display: none;
+    }
+
+    /* Dark theme */
+    .dark {
+        background: #222;
+        color: white;
+    }
+
+    .dark .container {
+        background: #333;
+    }
+
+    .dark .section {
+        background: #444;
+    }
+
+    .dark h2 {
+        color: #80c8ff;
+    }
+
+    @media(max-width: 600px) {
+        .container {
+            width: 90%;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>TechFest 2026 Registration</h1>
+    <p id="greeting">Welcome to TechFest!</p>
+
+    <button type="button" onclick="changeTheme()">
+        Change Theme
+    </button>
+</header>
+
+<div class="container">
+
+    <h2>Student Registration Form</h2>
+
+    <form id="regForm" onsubmit="return validateForm()">
+
+        <label>Full Name:</label>
+        <input type="text" id="name" oninput="updateGreeting()">
+        <span class="error" id="nameError"></span>
+
+        <label>Email:</label>
+        <input type="text" id="email">
+        <span class="error" id="emailError"></span>
+
+        <label>Mobile Number:</label>
+        <input type="text" id="mobile" maxlength="10">
+        <span class="error" id="mobileError"></span>
+
+        <label>Date of Birth:</label>
+        <input type="date" id="dob">
+        <span class="error" id="dobError"></span>
+
+        <label>Year of Study:</label>
+        <select id="course">
+            <option value="">Select Year</option>
+            <option>First Year</option>
+            <option>Second Year</option>
+            <option>Third Year</option>
+            <option>Final Year</option>
+        </select>
+        <span class="error" id="courseError"></span>
+
+        <label>Gender:</label>
+        <div class="choice">
+            <label><input type="radio" name="gender" value="Male"> Male</label>
+            <label><input type="radio" name="gender" value="Female"> Female</label>
+            <label><input type="radio" name="gender" value="Other"> Other</label>
+        </div>
+        <span class="error" id="genderError"></span>
+
+        <label>Events of Interest:</label>
+        <div class="choice">
+            <label><input type="checkbox" name="interest" value="Hackathon"> Hackathon</label>
+            <label><input type="checkbox" name="interest" value="Quiz"> Quiz</label>
+            <label><input type="checkbox" name="interest" value="Robotics"> Robotics</label>
+        </div>
+        <span class="error" id="interestError"></span>
+
+        <label>Password:</label>
+        <input type="password" id="password">
+        <span class="error" id="passwordError"></span>
+
+        <label>Confirm Password:</label>
+        <input type="password" id="confirm">
+        <span class="error" id="confirmError"></span>
+
+        <label>Address:</label>
+        <textarea id="address" rows="3" oninput="countCharacters()"></textarea>
+        <p>Characters: <span id="count">0</span></p>
+        <span class="error" id="addressError"></span>
+
+        <label class="choice">
+            <input type="checkbox" id="terms">
+            I accept the terms and conditions.
+        </label>
+        <span class="error" id="termsError"></span>
+
+        <br>
+
+        <button type="submit">Register</button>
+        <button type="reset" onclick="clearMessages()">Clear</button>
+
+    </form>
+
+    <p id="result"></p>
+
+
+    <!-- DOM Manipulation -->
+    <div class="section">
+
+        <h2>Event Rules</h2>
+
+        <button type="button" onclick="toggleRules()">
+            Show / Hide Rules
+        </button>
+
+        <div id="rules">
+            <ul>
+                <li>Bring your college ID card.</li>
+                <li>Participate in technical events.</li>
+                <li>Follow college discipline.</li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    <!-- Countdown Timer -->
+    <div class="section">
+
+        <h2>Event Countdown</h2>
+
+        <h3 id="timer">Loading...</h3>
+
+    </div>
+
+
+    <!-- Text Formatting -->
+    <div class="section">
+
+        <h2>Text Formatting</h2>
+
+        <p id="notice">
+            Welcome to TechFest 2026!
+        </p>
+
+        <button type="button" onclick="changeSize()">
+            Increase Size
+        </button>
+
+        <button type="button" onclick="makeBold()">
+            Bold
+        </button>
+
+        <button type="button" onclick="changeColor()">
+            Change Color
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+// FORM VALIDATION
+
+function validateForm() {
+
+    let valid = true;
+
+    // Get values
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let mobile = document.getElementById("mobile").value.trim();
+    let dob = document.getElementById("dob").value;
+    let course = document.getElementById("course").value;
+    let password = document.getElementById("password").value;
+    let confirm = document.getElementById("confirm").value;
+    let address = document.getElementById("address").value.trim();
+
+    // Clear previous errors
+    clearMessages();
+
+    // Name validation
+    if (!/^[A-Za-z ]{3,50}$/.test(name)) {
+        document.getElementById("nameError").innerHTML =
+            "Enter a valid name (minimum 3 letters).";
+        valid = false;
+    }
+
+    // Email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById("emailError").innerHTML =
+            "Enter a valid email address.";
+        valid = false;
+    }
+
+    // Mobile validation
+    if (!/^[6-9][0-9]{9}$/.test(mobile)) {
+        document.getElementById("mobileError").innerHTML =
+            "Enter a valid 10 digit mobile number.";
+        valid = false;
+    }
+
+    // DOB validation
+    if (!dob || new Date(dob) > new Date()) {
+        document.getElementById("dobError").innerHTML =
+            "Enter a valid date of birth.";
+        valid = false;
+    }
+
+    // Course validation
+    if (course === "") {
+        document.getElementById("courseError").innerHTML =
+            "Please select your year.";
+        valid = false;
+    }
+
+    // Gender validation
+    let gender = document.querySelector(
+        'input[name="gender"]:checked'
+    );
+
+    if (!gender) {
+        document.getElementById("genderError").innerHTML =
+            "Please select gender.";
+        valid = false;
+    }
+
+    // Interest validation
+    let interests = document.querySelectorAll(
+        'input[name="interest"]:checked'
+    );
+
+    if (interests.length === 0) {
+        document.getElementById("interestError").innerHTML =
+            "Select at least one event.";
+        valid = false;
+    }
+
+    // Password validation
+    if (password.length < 8 ||
+        !/[A-Z]/.test(password) ||
+        !/[a-z]/.test(password) ||
+        !/[0-9]/.test(password) ||
+        !/[^A-Za-z0-9]/.test(password)) {
+
+        document.getElementById("passwordError").innerHTML =
+            "Password needs 8 characters, uppercase, lowercase, number and special character.";
+        valid = false;
+    }
+
+    // Confirm password
+    if (confirm === "" || password !== confirm) {
+        document.getElementById("confirmError").innerHTML =
+            "Passwords do not match.";
+        valid = false;
+    }
+
+    // Address validation
+    if (address.length < 10) {
+        document.getElementById("addressError").innerHTML =
+            "Address must contain at least 10 characters.";
+        valid = false;
+    }
+
+    // Terms validation
+    if (!document.getElementById("terms").checked) {
+        document.getElementById("termsError").innerHTML =
+            "Please accept the terms.";
+        valid = false;
+    }
+
+    // Final result
+    if (valid) {
+        document.getElementById("result").innerHTML =
+            "Registration Successful! Welcome to TechFest.";
+
+        document.getElementById("result").className = "success";
+    }
+
+    return false;
+}
+
+
+// CLEAR ERROR MESSAGES
+
+function clearMessages() {
+
+    let errors = document.querySelectorAll(".error");
+
+    errors.forEach(function(error) {
+        error.innerHTML = "";
+    });
+
+    document.getElementById("result").innerHTML = "";
+}
+
+
+// DYNAMIC GREETING
+
+function updateGreeting() {
+
+    let name = document.getElementById("name").value;
+
+    document.getElementById("greeting").innerHTML =
+        name ? "Hello, " + name + "!" : "Welcome to TechFest!";
+}
+
+
+// CHARACTER COUNTER
+
+function countCharacters() {
+
+    let address = document.getElementById("address").value;
+
+    document.getElementById("count").innerHTML =
+        address.length;
+}
+
+
+// THEME SWITCHING
+
+function changeTheme() {
+
+    document.body.classList.toggle("dark");
+
+}
+
+
+// SHOW / HIDE RULES
+
+function toggleRules() {
+
+    let rules = document.getElementById("rules");
+
+    if (rules.style.display === "block") {
+        rules.style.display = "none";
+    } else {
+        rules.style.display = "block";
+    }
+
+}
+
+
+// COUNTDOWN TIMER
+
+let eventDate = new Date("December 15, 2026 09:00:00").getTime();
+
+let countdown = setInterval(function() {
+
+    let now = new Date().getTime();
+
+    let distance = eventDate - now;
+
+    if (distance <= 0) {
+
+        clearInterval(countdown);
+
+        document.getElementById("timer").innerHTML =
+            "Event Started!";
+
+        return;
+    }
+
+    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+    let hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+    );
+
+    let minutes = Math.floor(
+        (distance % (1000 * 60 * 60)) /
+        (1000 * 60)
+    );
+
+    let seconds = Math.floor(
+        (distance % (1000 * 60)) / 1000
+    );
+
+    document.getElementById("timer").innerHTML =
+        days + " Days " + hours + " Hours " +
+        minutes + " Minutes " + seconds + " Seconds";
+
+}, 1000);
+
+
+// TEXT FORMATTING
+
+function changeSize() {
+
+    let text = document.getElementById("notice");
+
+    text.style.fontSize = "25px";
+
+}
+
+function makeBold() {
+
+    let text = document.getElementById("notice");
+
+    text.style.fontWeight = "bold";
+
+}
+
+function changeColor() {
+
+    let text = document.getElementById("notice");
+
+    text.style.color = "red";
+
+}
+
+</script>
+
+</body>
+</html>

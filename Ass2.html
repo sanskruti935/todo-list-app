@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>College Timetable</title>
+
+<style>
+
+/* General CSS */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f2f5f8;
+}
+
+/* Header */
+header {
+    background-color: #123456;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Navigation */
+nav {
+    background-color: #222;
+    padding: 15px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 12px;
+}
+
+/* Main layout */
+.container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.content {
+    flex: 3;
+    min-width: 0;
+}
+
+.sidebar {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Sections */
+section {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+h2 {
+    color: #123456;
+}
+
+/* Table */
+.table-box {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+caption {
+    font-weight: bold;
+    padding: 10px;
+    color: #123456;
+}
+
+th, td {
+    border: 1px solid #999;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #123456;
+    color: white;
+}
+
+.break {
+    background-color: #ffe0a3;
+    font-weight: bold;
+}
+
+.lab {
+    background-color: #c8f0d0;
+    font-weight: bold;
+}
+
+/* DIV timetable */
+.schedule {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.class-box {
+    background-color: #dceaf7;
+    padding: 15px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.class-box span {
+    display: block;
+    font-weight: bold;
+    color: #123456;
+}
+
+/* Sidebar */
+.sidebar ul {
+    padding-left: 20px;
+}
+
+audio, video {
+    max-width: 100%;
+}
+
+/* Footer */
+footer {
+    background-color: #123456;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+
+    .container {
+        flex-direction: column;
+    }
+
+    .schedule {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .schedule {
+        grid-template-columns: 1fr;
+    }
+
+    section {
+        padding: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <h1>Department of Information Technology</h1>
+    <p>College Class Timetable and Infrastructure</p>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+    <a href="#timetable">Timetable</a>
+    <a href="#infrastructure">Infrastructure</a>
+    <a href="#divlayout">Div Layout</a>
+    <a href="#media">Multimedia</a>
+</nav>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <!-- PART A: TIMETABLE USING TABLE -->
+        <section id="timetable">
+
+            <h2>Weekly Class Timetable</h2>
+
+            <div class="table-box">
+
+            <table>
+
+                <caption>
+                    B.E. Information Technology - Semester III
+                </caption>
+
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>9-10 AM</th>
+                        <th>10-11 AM</th>
+                        <th>11-11:15 AM</th>
+                        <th>11:15-12:15 PM</th>
+                        <th>12:15-1:15 PM</th>
+                        <th>1:15-2 PM</th>
+                        <th>2-3 PM</th>
+                        <th>3-4 PM</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <th>Monday</th>
+                        <td>DBMS</td>
+                        <td>Java</td>
+                        <td class="break" rowspan="5">
+                            Tea Break
+                        </td>
+                        <td>CN</td>
+                        <td>OS</td>
+                        <td class="break" rowspan="5">
+                            Lunch
+                        </td>
+                        <td>Maths</td>
+                        <td>Library</td>
+                    </tr>
+
+                    <tr>
+                        <th>Tuesday</th>
+                        <td>Java</td>
+                        <td>DBMS</td>
+                        <td>OS</td>
+                        <td>CN</td>
+                        <td>Maths</td>
+                        <td>Sports</td>
+                    </tr>
+
+                    <tr>
+                        <th>Wednesday</th>
+                        <td class="lab" colspan="2">
+                            Java Lab
+                        </td>
+                        <td>DBMS</td>
+                        <td>OS</td>
+                        <td class="lab" colspan="2">
+                            Mini Project
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Thursday</th>
+                        <td>CN</td>
+                        <td>Maths</td>
+                        <td>Java</td>
+                        <td>DBMS</td>
+                        <td>OS</td>
+                        <td rowspan="2">Mentoring</td>
+                    </tr>
+
+                    <tr>
+                        <th>Friday</th>
+                        <td class="lab" colspan="2">
+                            DBMS Lab
+                        </td>
+                        <td>CN</td>
+                        <td>Maths</td>
+                        <td>Java</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+            </div>
+
+            <p>
+                Green indicates laboratory sessions.
+                Yellow indicates break periods.
+            </p>
+
+        </section>
+
+
+        <!-- UNIVERSITY INFRASTRUCTURE -->
+        <section id="infrastructure">
+
+            <h2>University Infrastructure</h2>
+
+            <div class="table-box">
+
+            <table>
+
+                <caption>College Facilities</caption>
+
+                <tr>
+                    <th rowspan="2">Facility</th>
+                    <th colspan="2">Capacity</th>
+                    <th rowspan="2">Location</th>
+                </tr>
+
+                <tr>
+                    <th>Units</th>
+                    <th>Seats</th>
+                </tr>
+
+                <tr>
+                    <td>Lecture Halls</td>
+                    <td>20</td>
+                    <td>1200</td>
+                    <td>Block A</td>
+                </tr>
+
+                <tr>
+                    <td>Computer Labs</td>
+                    <td>10</td>
+                    <td>600</td>
+                    <td>Block B</td>
+                </tr>
+
+                <tr>
+                    <td>Library</td>
+                    <td>1</td>
+                    <td>500</td>
+                    <td>Main Building</td>
+                </tr>
+
+                <tr>
+                    <td>Auditorium</td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td>Campus</td>
+                </tr>
+
+            </table>
+            </div>
+
+        </section>
+
+
+        <!-- PART B: DIV AND SPAN LAYOUT -->
+        <section id="divlayout">
+
+            <h2>Timetable Using DIV and SPAN</h2>
+
+            <p>
+                The following timetable is designed using
+                div and span elements instead of HTML tables.
+            </p>
+
+            <div class="schedule">
+
+                <div class="class-box">
+                    <span>Monday</span>
+                    DBMS
+                </div>
+
+                <div class="class-box">
+                    <span>Tuesday</span>
+                    Java
+                </div>
+
+                <div class="class-box">
+                    <span>Wednesday</span>
+                    Computer Networks
+                </div>
+
+                <div class="class-box">
+                    <span>Thursday</span>
+                    Operating Systems
+                </div>
+
+                <div class="class-box">
+                    <span>Friday</span>
+                    Mathematics
+                </div>
+
+                <div class="class-box">
+                    <span>Saturday</span>
+                    Project Work
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PART C: MULTIMEDIA -->
+        <section id="media">
+
+            <h2>Multimedia Section</h2>
+
+            <h3>College Audio</h3>
+
+            <audio controls>
+                <source
+                    src="https://www.w3schools.com/html/horse.mp3"
+                    type="audio/mpeg">
+
+                Your browser does not support audio.
+            </audio>
+
+            <h3>College Video</h3>
+
+            <video controls width="450">
+
+                <source
+                    src="https://www.w3schools.com/html/mov_bbb.mp4"
+                    type="video/mp4">
+
+                Your browser does not support video.
+
+            </video>
+
+        </section>
+
+    </main>
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <section>
+
+            <h2>College Facilities</h2>
+
+            <ul>
+                <li>Computer Laboratories</li>
+                <li>Central Library</li>
+                <li>Sports Ground</li>
+                <li>Auditorium</li>
+                <li>Seminar Hall</li>
+                <li>Wi-Fi Campus</li>
+            </ul>
+
+        </section>
+
+        <section>
+
+            <h2>Important Information</h2>
+
+            <p><b>College:</b> Engineering College</p>
+
+            <p><b>Department:</b> Information Technology</p>
+
+            <p><b>Academic Year:</b> 2026-27</p>
+
+            <p><b>Working Days:</b> Monday to Friday</p>
+
+        </section>
+
+    </aside>
+
+</div>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <p>
+        &copy; 2026 Department of Information Technology
+    </p>
+
+    <p>All Rights Reserved.</p>
+
+</footer>
+
+</body>
+</html>

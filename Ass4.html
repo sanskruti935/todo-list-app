@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Event Explorer</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f2f5f8;
+    }
+
+    header {
+        background: #123456;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .container {
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    /* Search and filter section */
+    .filters {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    button {
+        background: #123456;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #2468a0;
+    }
+
+    #count {
+        grid-column: 1 / -1;
+        font-weight: bold;
+        color: #123456;
+    }
+
+    /* Event cards */
+    .events {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        border-top: 5px solid #123456;
+        box-shadow: 0 2px 5px #ccc;
+    }
+
+    .card h2 {
+        color: #123456;
+    }
+
+    .category {
+        display: inline-block;
+        background: #dceaf7;
+        color: #123456;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .price {
+        color: green;
+        font-weight: bold;
+    }
+
+    /* No results */
+    #noResults {
+        display: none;
+        background: white;
+        padding: 30px;
+        text-align: center;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    footer {
+        background: #123456;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        margin-top: 30px;
+    }
+
+    /* Responsive design */
+    @media(max-width: 900px) {
+        .filters {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media(max-width: 500px) {
+        .filters {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Event Explorer</h1>
+    <p>Department of Information Technology</p>
+    <p>Search, Filter and Explore College Events</p>
+</header>
+
+<div class="container">
+
+    <!-- SEARCH AND FILTER -->
+    <div class="filters">
+
+        <div>
+            <label>Search Event</label>
+            <input type="text" id="search"
+                   placeholder="Search by keyword...">
+        </div>
+
+        <div>
+            <label>Category</label>
+            <select id="category">
+                <option value="all">All Categories</option>
+                <option value="Technical">Technical</option>
+                <option value="Cultural">Cultural</option>
+                <option value="Sports">Sports</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Seminar">Seminar</option>
+            </select>
+        </div>
+
+        <div>
+            <label>From Date</label>
+            <input type="date" id="fromDate">
+        </div>
+
+        <div>
+            <label>To Date</label>
+            <input type="date" id="toDate">
+        </div>
+
+        <div>
+            <label>Sort By</label>
+            <select id="sort">
+                <option value="date">Date: Soonest First</option>
+                <option value="latest">Date: Latest First</option>
+                <option value="title">Title: A to Z</option>
+                <option value="price">Price: Low to High</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="button" onclick="clearFilters()">
+                Clear Filters
+            </button>
+        </div>
+
+        <p id="count"></p>
+
+    </div>
+
+
+    <!-- EVENT CARDS -->
+    <div class="events" id="eventList"></div>
+
+
+    <!-- NO RESULTS MESSAGE -->
+    <div id="noResults">
+        <h2>No Results Found!</h2>
+        <p>Try another keyword or change your filters.</p>
+    </div>
+
+</div>
+
+
+<footer>
+    <p>&copy; 2026 Department of Information Technology</p>
+</footer>
+
+
+<script>
+
+// STEP 1: CREATE ARRAY OF EVENT OBJECTS
+
+let events = [
+
+    {
+        title: "Python Programming Workshop",
+        category: "Workshop",
+        date: "2026-11-20",
+        venue: "Computer Lab 2",
+        price: 0,
+        description: "Learn Python programming and coding."
+    },
+
+    {
+        title: "Cyber Security Seminar",
+        category: "Seminar",
+        date: "2026-11-25",
+        venue: "Seminar Hall",
+        price: 50,
+        description: "Learn about cyber security and hacking."
+    },
+
+    {
+        title: "Cricket Tournament",
+        category: "Sports",
+        date: "2026-12-01",
+        venue: "Sports Ground",
+        price: 100,
+        description: "Inter-department cricket competition."
+    },
+
+    {
+        title: "Web Design Competition",
+        category: "Technical",
+        date: "2026-12-05",
+        venue: "Computer Lab 4",
+        price: 150,
+        description: "Create attractive websites using HTML and CSS."
+    },
+
+    {
+        title: "Annual Cultural Festival",
+        category: "Cultural",
+        date: "2026-12-10",
+        venue: "Main Auditorium",
+        price: 200,
+        description: "Music, dance and drama performances."
+    },
+
+    {
+        title: "Cloud Computing Workshop",
+        category: "Workshop",
+        date: "2026-12-15",
+        venue: "Computer Lab 1",
+        price: 100,
+        description: "Learn cloud computing and deployment."
+    },
+
+    {
+        title: "Tech Quiz Competition",
+        category: "Technical",
+        date: "2026-12-20",
+        venue: "Seminar Hall",
+        price: 30,
+        description: "Quiz based on programming and technology."
+    },
+
+    {
+        title: "Annual Sports Day",
+        category: "Sports",
+        date: "2027-01-05",
+        venue: "College Ground",
+        price: 0,
+        description: "Various sports and athletic activities."
+    }
+
+];
+
+
+// STEP 2: DISPLAY EVENT CARDS
+
+function displayEvents(data) {
+
+    let eventList = document.getElementById("eventList");
+
+    let noResults = document.getElementById("noResults");
+
+    eventList.innerHTML = "";
+
+    document.getElementById("count").innerHTML =
+        "Showing " + data.length + " of " + events.length + " events";
+
+    if (data.length === 0) {
+        noResults.style.display = "block";
+        return;
+    }
+
+    noResults.style.display = "none";
+
+    data.forEach(function(event) {
+
+        let card = document.createElement("div");
+
+        card.className = "card";
+
+        let title = document.createElement("h2");
+        title.textContent = event.title;
+
+        let category = document.createElement("span");
+        category.className = "category";
+        category.textContent = event.category;
+
+        let date = document.createElement("p");
+        date.textContent = "Date: " + event.date;
+
+        let venue = document.createElement("p");
+        venue.textContent = "Venue: " + event.venue;
+
+        let description = document.createElement("p");
+        description.textContent = event.description;
+
+        let price = document.createElement("p");
+        price.className = "price";
+
+        price.textContent = event.price === 0
+            ? "Free Entry"
+            : "Price: Rs. " + event.price;
+
+        card.appendChild(title);
+        card.appendChild(category);
+        card.appendChild(date);
+        card.appendChild(venue);
+        card.appendChild(description);
+        card.appendChild(price);
+
+        eventList.appendChild(card);
+
+    });
+
+}
+
+
+// STEP 3: SEARCH AND FILTER EVENTS
+
+function filterEvents() {
+
+    let keyword = document.getElementById("search")
+        .value.toLowerCase().trim();
+
+    let category = document.getElementById("category").value;
+
+    let fromDate = document.getElementById("fromDate").value;
+
+    let toDate = document.getElementById("toDate").value;
+
+    let filtered = events.filter(function(event) {
+
+        let matchKeyword =
+            (event.title + " " + event.description + " " +
+             event.venue + " " + event.category)
+            .toLowerCase().includes(keyword);
+
+        let matchCategory =
+            category === "all" || event.category === category;
+
+        let matchFromDate =
+            fromDate === "" || event.date >= fromDate;
+
+        let matchToDate =
+            toDate === "" || event.date <= toDate;
+
+        return matchKeyword &&
+               matchCategory &&
+               matchFromDate &&
+               matchToDate;
+
+    });
+
+
+    // STEP 4: SORT EVENTS
+
+    let sort = document.getElementById("sort").value;
+
+    if (sort === "date") {
+        filtered.sort(function(a, b) {
+            return a.date.localeCompare(b.date);
+        });
+    }
+
+    else if (sort === "latest") {
+        filtered.sort(function(a, b) {
+            return b.date.localeCompare(a.date);
+        });
+    }
+
+    else if (sort === "title") {
+        filtered.sort(function(a, b) {
+            return a.title.localeCompare(b.title);
+        });
+    }
+
+    else if (sort === "price") {
+        filtered.sort(function(a, b) {
+            return a.price - b.price;
+        });
+    }
+
+    // DISPLAY FINAL RESULTS
+
+    displayEvents(filtered);
+
+}
+
+
+// STEP 5: CLEAR ALL FILTERS
+
+function clearFilters() {
+
+    document.getElementById("search").value = "";
+
+    document.getElementById("category").value = "all";
+
+    document.getElementById("fromDate").value = "";
+
+    document.getElementById("toDate").value = "";
+
+    document.getElementById("sort").value = "date";
+
+    filterEvents();
+
+}
+
+
+// STEP 6: ADD EVENT LISTENERS
+
+document.getElementById("search")
+    .addEventListener("input", filterEvents);
+
+document.getElementById("category")
+    .addEventListener("change", filterEvents);
+
+document.getElementById("fromDate")
+    .addEventListener("change", filterEvents);
+
+document.getElementById("toDate")
+    .addEventListener("change", filterEvents);
+
+document.getElementById("sort")
+    .addEventListener("change", filterEvents);
+
+
+// INITIAL DISPLAY
+
+displayEvents(events);
+
+</script>
+
+</body>
+</html>
